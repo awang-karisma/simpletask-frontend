@@ -10,6 +10,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      BASE_URL: /simpletask-frontend
+      VITE_BACKEND_URL: https://simpletask-backend.awangkarisma.repl.co
+
     steps:
       - uses: actions/checkout@v2
 
