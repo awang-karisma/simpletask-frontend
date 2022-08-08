@@ -1,4 +1,4 @@
-import { type Writable, derived, writable } from 'svelte/store'
+import { type Writable, writable } from 'svelte/store'
 
 import type { Task } from '@/types/Task.type'
 

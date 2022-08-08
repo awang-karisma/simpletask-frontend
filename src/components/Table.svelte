@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte'
+  import { createEventDispatcher } from 'svelte'
   import { Pencil, Trash } from 'svelte-heros'
 
   import TableButton from '@/components/TableButton.svelte'

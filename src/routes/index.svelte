@@ -1,17 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { PlusCircle } from 'svelte-heros'
-  import { type Writable, get, writable } from 'svelte/store'
+  import { type Writable, writable } from 'svelte/store'
 
   import Modal from '@/components/Modal.svelte'
   import Table from '@/components/Table.svelte'
   import { tasks } from '@/stores/task'
   import type { TableButtonDetail } from '@/types/TableButtonDetail.type'
-  import type { TableData } from '@/types/TableData.type'
   import type { Task } from '@/types/Task.type'
 
   let isModalVisible: Writable<boolean> = writable(false)
-  let modalData: Writable<TableData> = writable()
   let modalMode: string
   let task: Writable<Task> = writable()
 
@@ -19,14 +17,14 @@
     await getData()
   })
 
-  const getData: Function = async () => {
+  const getData = async () => {
     const req = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/tasks`)
     const data = await req.json()
     tasks.set(data.items)
     console.log($tasks)
   }
 
-  const submitHandler: Function = async (type: string, data: Task) => {
+  const submitHandler = async (type: string, data: Task) => {
     if (type === 'add') {
       console.log(JSON.stringify(data))
       const req = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/tasks`, {
@@ -66,7 +64,7 @@
     $isModalVisible = false
   }
 
-  const openModal: Function = (mode: string, detail: TableButtonDetail) => {
+  const openModal = (mode: string, detail: TableButtonDetail) => {
     console.log(mode)
     modalMode = mode
     if (mode === 'add') {

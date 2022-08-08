@@ -1,19 +1,18 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte'
+  import { createEventDispatcher } from 'svelte'
   import { fade } from 'svelte/transition'
 
   import type { Task } from '@/types/Task.type'
 
   const dispatch = createEventDispatcher()
-  let mode: string = 'add'
+  let mode = 'add'
   let data: Task
-  let isOpen: boolean = false
-  const handler: Function = (event: MouseEvent) => {
+  let isOpen = false
+  const handler = (event: MouseEvent) => {
     event.preventDefault()
     dispatch(mode, data)
   }
 
-  const isModeDelete: boolean = mode === 'delete'
   export { mode, data, isOpen }
 </script>
 

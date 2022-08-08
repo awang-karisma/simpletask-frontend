@@ -6,8 +6,8 @@
   let isUserMenuOpen: Writable<boolean> = writable(false)
   let activeMenu: Writable<string> = writable('Home')
   let navigationLinks: NavigationLink[] = [
-    { name: 'Home', href: '#' },
-    { name: 'About', href: '#' }
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/' }
   ]
 </script>
 
@@ -84,7 +84,7 @@
           >
             <!-- Active: "bg-gray-100", Not Active: "" -->
             <a
-              href="#"
+              href="/"
               class="block px-4 py-2 text-sm text-gray-700"
               role="menuitem"
               tabindex="-1"
@@ -93,7 +93,7 @@
               Your Profile
             </a>
             <a
-              href="#"
+              href="/"
               class="block px-4 py-2 text-sm text-gray-700"
               role="menuitem"
               tabindex="-1"
@@ -102,7 +102,7 @@
               Settings
             </a>
             <a
-              href="#"
+              href="/"
               class="block px-4 py-2 text-sm text-gray-700"
               role="menuitem"
               tabindex="-1"
