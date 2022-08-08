@@ -17,6 +17,9 @@ const config = {
     trailingSlash: 'always',
     alias: {
       '@': './src'
+    },
+    paths: {
+      base: process.env.BASE_URL ?? ''
     }
   }
 }

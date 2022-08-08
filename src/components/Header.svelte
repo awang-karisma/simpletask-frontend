@@ -3,11 +3,12 @@
 
   import type { NavigationLink } from '@/types/NavigationLink.type'
 
+  const base = import.meta.env.BASE_URL
   let isUserMenuOpen: Writable<boolean> = writable(false)
   let activeMenu: Writable<string> = writable('Home')
   let navigationLinks: NavigationLink[] = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/' }
+    { name: 'Home', href: `${base}` },
+    { name: 'About', href: `${base}` }
   ]
 </script>
 
@@ -57,7 +58,7 @@
               <span class="sr-only">Open user menu</span>
               <img
                 class="h-8 w-8 rounded-full"
-                src="images/fotoprofil.jpg"
+                src="{base}images/fotoprofil.jpg"
                 alt=""
               />
             </button>
@@ -84,7 +85,7 @@
           >
             <!-- Active: "bg-gray-100", Not Active: "" -->
             <a
-              href="/"
+              href="{base}"
               class="block px-4 py-2 text-sm text-gray-700"
               role="menuitem"
               tabindex="-1"
@@ -93,7 +94,7 @@
               Your Profile
             </a>
             <a
-              href="/"
+              href="{base}"
               class="block px-4 py-2 text-sm text-gray-700"
               role="menuitem"
               tabindex="-1"
@@ -102,7 +103,7 @@
               Settings
             </a>
             <a
-              href="/"
+              href="{base}"
               class="block px-4 py-2 text-sm text-gray-700"
               role="menuitem"
               tabindex="-1"

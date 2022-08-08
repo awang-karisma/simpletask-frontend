@@ -64,20 +64,21 @@
     $isModalVisible = false
   }
 
-  const openModal = (mode: string, detail: TableButtonDetail) => {
+  const openModal = (mode: string, detail?: TableButtonDetail) => {
     console.log(mode)
     modalMode = mode
+    const emptyTask: Task = {
+      id: 0,
+      name: '',
+      detail: '',
+      assignee: '',
+      due: '',
+      status: 0
+    }
     if (mode === 'add') {
-      task.set({
-        id: 0,
-        name: '',
-        detail: '',
-        assignee: '',
-        due: '',
-        status: 0
-      })
+      task.set(emptyTask)
     } else {
-      task.set(detail.data)
+      task.set(detail?.data ?? emptyTask)
     }
     $isModalVisible = true
   }
