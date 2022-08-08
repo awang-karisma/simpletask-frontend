@@ -1,17 +1,14 @@
 <script lang="ts">
+  import { createEventDispatcher, onMount } from 'svelte'
   import { Pencil, Trash } from 'svelte-heros'
-  let tableHeader: Array<string> = []
-  import { createEventDispatcher } from 'svelte'
-  import type { TableButtonDetail } from '@/types/TableButtonDetail.type'
-  import TableButton from '@/components/TableButton.svelte'
-  const dispatch = createEventDispatcher()
-  const handler: Function = (action: string, data: TableButtonDetail) => {
-    // const data: TableButtonDetail = { id: index, data: td }
-    dispatch(action, data)
-  }
-  let tableData: Array<Array<string>> = [[]]
 
-  export { tableData, tableHeader }
+  import TableButton from '@/components/TableButton.svelte'
+  import type { Task } from '@/types/Task.type'
+
+  const dispatch = createEventDispatcher()
+
+  let tableData: Task[]
+  export { tableData }
 </script>
 
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -20,57 +17,81 @@
       class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
     >
       <tr>
-        {#if tableHeader.length > 0}
-          <th class="px-6 py-3">No.</th>
-          {#each tableHeader as th}
-            <th class="px-6 py-3">{th}</th>
-          {/each}
-          <th class="px-6 py-3">Action</th>
-        {:else}
-          <th class="px-6 py-3">No Header</th>
-        {/if}
+        <th class="px-6 py-3">No.</th>
+        <th class="px-6 py-3">Task Name</th>
+        <!-- <th class="px-6 py-3">Task Details</th> -->
+        <th class="px-6 py-3">Assignee</th>
+        <th class="px-6 py-3">Due</th>
+        <th class="px-6 py-3">Status</th>
+        <th class="px-6 py-3">Action</th>
       </tr>
     </thead>
     <tbody>
       {#if tableData.length > 0}
         {#each tableData as td, index}
           <tr
-            class="bg-white odd:bg-white even:bg-gray-50 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 odd:dark:bg-gray-800 even:dark:bg-gray-700 dark:hover:bg-gray-600"
+            class="cursor-pointer bg-white odd:bg-white even:bg-gray-50 hover:bg-gray-100"
+            on:click="{() =>
+              dispatch('tableClick', { action: 'view', id: index, data: td })}"
           >
             <td
               class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
             >
               {index + 1}
             </td>
-            {#each td as key}
-              <td
-                class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-              >
-                {key}
-              </td>
-            {/each}
+            <td
+              class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+            >
+              {td.name}
+            </td>
+            <!-- <td
+              class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+            >
+              {td.detail}
+            </td> -->
+            <td
+              class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+            >
+              {td.assignee}
+            </td>
+            <td
+              class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+            >
+              {new Date(parseInt(td.due)).toLocaleString()}
+            </td>
+            <td
+              class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+            >
+              {td.status}
+            </td>
             <td
               class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
             >
               <div class="flex flex-row">
-                <!-- <button type="submit" class="rounded-lg bg-green-300 p-1.5 mx-1" on:click={() => dispatch('edit', {id:index, data:td})}> -->
                 <TableButton
                   color="green"
                   isLoading="{false}"
-                  on:click="{() => handler('edit', { id: index, data: td })}"
+                  on:click="{() =>
+                    dispatch('tableClick', {
+                      action: 'edit',
+                      id: index,
+                      data: td
+                    })}"
                 >
                   <Pencil />
                 </TableButton>
-                <!-- </button> -->
-                <!-- <button type="submit" class="rounded-lg bg-red-300 p-1.5 mx-1" on:click={() => dispatch('delete', {id:index, data:td})}> -->
                 <TableButton
                   color="red"
                   isLoading="{false}"
-                  on:click="{() => dispatch('delete', { id: index, data: td })}"
+                  on:click="{() =>
+                    dispatch('tableClick', {
+                      action: 'delete',
+                      id: index,
+                      data: td
+                    })}"
                 >
                   <Trash />
                 </TableButton>
-                <!-- </button> -->
               </div>
             </td>
           </tr>

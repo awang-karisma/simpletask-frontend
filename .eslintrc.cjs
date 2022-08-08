@@ -10,11 +10,9 @@ module.exports = {
     'plugin:import/typescript',
     'prettier'
   ],
-  plugins: ['svelte3', '@typescript-eslint', 'simple-import-sort', 'prettier'],
+  plugins: ['svelte3', '@typescript-eslint', 'prettier'],
   rules: {
-    'prettier/prettier': 'error',
-    'simple-import-sort/imports': 'error',
-    'simple-import-sort/exports': 'error'
+    'prettier/prettier': 'error'
   },
   ignorePatterns: ['*.cjs'],
   overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],

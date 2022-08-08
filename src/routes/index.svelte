@@ -1,51 +1,86 @@
 <script lang="ts">
-  import Table from '@/components/Table.svelte'
-  import Modal from '@/components/Modal.svelte'
+  import { onMount } from 'svelte'
   import { PlusCircle } from 'svelte-heros'
-  import { writable, type Writable } from 'svelte/store'
+  import { type Writable, get, writable } from 'svelte/store'
+
+  import Modal from '@/components/Modal.svelte'
+  import Table from '@/components/Table.svelte'
+  import { tasks } from '@/stores/task'
   import type { TableButtonDetail } from '@/types/TableButtonDetail.type'
   import type { TableData } from '@/types/TableData.type'
+  import type { Task } from '@/types/Task.type'
 
-  const tableHeader: Array<string> = [
-    'Task Name',
-    'Task Detail',
-    'Assignee',
-    'Due Date',
-    'Done'
-  ]
-  const tableData: Array<Array<string>> = [
-    ['test', 'Tugas', 'saya', Date.now().toString(), 'false'],
-    ['test', 'Tugas', 'saya', Date.now().toString(), 'false'],
-    ['test', 'Tugas', 'saya', Date.now().toString(), 'false'],
-    ['test', 'Tugas', 'saya', Date.now().toString(), 'false']
-  ]
   let isModalVisible: Writable<boolean> = writable(false)
   let modalData: Writable<TableData> = writable()
   let modalMode: string
+  let task: Writable<Task> = writable()
+
+  onMount(async () => {
+    await getData()
+  })
+
+  const getData: Function = async () => {
+    const req = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/tasks`)
+    const data = await req.json()
+    tasks.set(data.items)
+    console.log($tasks)
+  }
+
+  const submitHandler: Function = async (type: string, data: Task) => {
+    if (type === 'add') {
+      console.log(JSON.stringify(data))
+      const req = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/tasks`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      const res = await req.json()
+      console.log(res)
+    } else if (type === 'edit') {
+      const req = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/tasks/${data.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        }
+      )
+      const res = await req.json()
+      console.log(res)
+    } else if (type === 'delete') {
+      const req = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/tasks/${data.id}`,
+        {
+          method: 'DELETE',
+          body: JSON.stringify(data)
+        }
+      )
+      const res = await req.json()
+      console.log(res)
+    }
+    await getData()
+    $isModalVisible = false
+  }
+
   const openModal: Function = (mode: string, detail: TableButtonDetail) => {
+    console.log(mode)
     modalMode = mode
     if (mode === 'add') {
-      modalData.set({
+      task.set({
+        id: 0,
         name: '',
-        task: '',
+        detail: '',
         assignee: '',
         due: '',
-        done: ''
+        status: 0
       })
     } else {
-      modalData.update((u) => {
-        u = {
-          name: detail.data[0],
-          task: detail.data[1],
-          assignee: detail.data[2],
-          due: detail.data[3],
-          done: detail.data[4]
-        }
-        console.log(detail.data)
-        return u
-      })
+      task.set(detail.data)
     }
-    console.log($modalData)
     $isModalVisible = true
   }
 </script>
@@ -63,14 +98,21 @@
   {#if $isModalVisible}
     <Modal
       mode="{modalMode}"
-      bind:data="{modalData}"
+      bind:data="{$task}"
       bind:isOpen="{$isModalVisible}"
-      on:submit="{(event) => console.log(event)}"
+      on:add="{(event) => submitHandler('add', event.detail)}"
+      on:edit="{(event) => submitHandler('edit', event.detail)}"
+      on:view="{(event) => submitHandler('view', event.detail)}"
+      on:delete="{(event) => submitHandler('delete', event.detail)}"
     />
   {/if}
   <Table
-    tableHeader="{tableHeader}"
-    tableData="{tableData}"
+    bind:tableData="{$tasks}"
+    on:tableClick="{(event) =>
+      openModal(event.detail.action, {
+        id: event.detail.id,
+        data: event.detail.data
+      })}"
     on:delete="{(event) => openModal('delete', event.detail)}"
     on:edit="{(event) => openModal('edit', event.detail)}"
   />

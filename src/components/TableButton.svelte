@@ -1,8 +1,12 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
   import { Refresh } from 'svelte-heros'
-  const dispatch = createEventDispatcher()
 
+  const dispatch = createEventDispatcher()
+  const handleClick = (event: MouseEvent, name: string) => {
+    event.stopPropagation()
+    dispatch(name)
+  }
   let color = 'green'
   let isLoading = false
   export { color, isLoading }
@@ -12,7 +16,7 @@
   <button
     type="submit"
     class="rounded-lg bg-{color}-300 mx-1 p-1.5"
-    on:click="{() => dispatch('click')}"
+    on:click="{(event) => handleClick(event, 'click')}"
   >
     {#if isLoading}
       <Refresh />
