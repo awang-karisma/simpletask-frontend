@@ -27,7 +27,7 @@
       </tr>
     </thead>
     <tbody>
-      {#if tableData.length > 0}
+      {#if tableData?.length ?? 0 > 0}
         {#each tableData as td, index}
           <tr
             class="cursor-pointer bg-white odd:bg-white even:bg-gray-50 hover:bg-gray-100"
