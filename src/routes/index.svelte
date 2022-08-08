@@ -23,12 +23,10 @@
     const req = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/tasks`)
     const data = await req.json()
     tasks.set(data.items)
-    console.log($tasks)
   }
 
   const submitHandler: Function = async (type: string, data: Task) => {
     if (type === 'add') {
-      console.log(JSON.stringify(data))
       const req = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/tasks`, {
         method: 'POST',
         headers: {
@@ -37,7 +35,6 @@
         body: JSON.stringify(data)
       })
       const res = await req.json()
-      console.log(res)
     } else if (type === 'edit') {
       const req = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/tasks/${data.id}`,
@@ -50,7 +47,6 @@
         }
       )
       const res = await req.json()
-      console.log(res)
     } else if (type === 'delete') {
       const req = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/tasks/${data.id}`,
@@ -60,14 +56,12 @@
         }
       )
       const res = await req.json()
-      console.log(res)
     }
     await getData()
     $isModalVisible = false
   }
 
   const openModal: Function = (mode: string, detail: TableButtonDetail) => {
-    console.log(mode)
     modalMode = mode
     if (mode === 'add') {
       task.set({
